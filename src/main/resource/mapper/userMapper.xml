@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.dao.UserDao">
+    <resultMap id="BaseResultMap" type="com.test.entity.User">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="age" column="age"/>
+        <result property="born_date" column="bornDate"/>
+        <result property="head_img" column="headImg"/>
+    </resultMap>
+
+    <sql id="userInfo">
+        id,
+        name,
+        age,
+        born_date,
+        head_img
+    </sql>
+
+    <!--全查询-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+      <include refid="userInfo" />
+        from t_user
+    </select>
+
+    <!--根据条件查询-->
+    <select id="selectBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="userInfo" />
+        from t_user
+        where 1=1
+        and
+        <if test="user.id != null and user.id !=''">
+            id = #{user.id}
+        </if>
+        <if test="user.name != null and user.name !=''">
+            name = #{user.name}
+        </if>
+        <if test="user.age != null and user.age !=''">
+            age = #{user.age}
+        </if>
+        <if test="user.bornDate != null and user.bornDate !=''">
+            born_date = #{user.bornDate}
+        </if>
+        <if test="user.headImg != null and user.headImg !=''">
+            head_img = #{user.headImg}
+        </if>
+    </select>
+
+    <!--添加-->
+    <insert id="insertBySelective" parameterType="com.test.entity.User">
+        insert into t_user
+        (name, age, born_date, head_img)
+        values
+        (#{user.name}, #{user.age}, #{user.bornDate}, #{user.headImg})
+    </insert>
+
+    <!--按照主键查询-->
+    <select id="selectById" resultMap="BaseResultMap" parameterType="long">
+        select
+        <include refid="userInfo" />
+        from t_user
+        where
+        id = #{id}
+    </select>
+
+</mapper>
